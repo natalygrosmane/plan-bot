@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+temp_audio/
+*.ogg
+*.mp3
+*.wav
+.DS_Store
