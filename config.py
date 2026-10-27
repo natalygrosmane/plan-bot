@@ -49,9 +49,26 @@ except Exception:
         from datetime import timezone
         TIMEZONE = timezone.utc
 
-# File paths
-INBOX_FILE = BASE_DIR / "inbox.md"
-TODO_FILE = BASE_DIR / "todo.md"
-BACKLOG_FILE = BASE_DIR / "backlog.md"
+# File paths (stored in data/ directory for Railway Volume persistence)
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
+
+INBOX_FILE = DATA_DIR / "inbox.md"
+TODO_FILE = DATA_DIR / "todo.md"
+BACKLOG_FILE = DATA_DIR / "backlog.md"
+
+# Auto-migrate existing root markdown files to data/ if present
+for src_name, dst_file in [
+    ("inbox.md", INBOX_FILE),
+    ("todo.md", TODO_FILE),
+    ("backlog.md", BACKLOG_FILE),
+]:
+    src_file = BASE_DIR / src_name
+    if src_file.exists() and not dst_file.exists():
+        try:
+            dst_file.write_text(src_file.read_text(encoding="utf-8"), encoding="utf-8")
+        except Exception:
+            pass
+
 TEMP_DIR = BASE_DIR / "temp_audio"
 TEMP_DIR.mkdir(exist_ok=True)
